@@ -1,0 +1,146 @@
+pod.yaml
+==========
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prince-pod
+  namespace: prince    # add namespace
+  labels:
+    app: prince-app
+spec:
+  containers:
+    - name: prince-app
+      image: prince9680/app:latest    # change image details
+      ports:
+        containerPort: 3000      # set your container port number
+
+
+
+
+Deployment.yaml
+===================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prince-dp
+  namespace: prince    # add namespace
+  labels:
+    app: prince-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: prince-app
+  template:
+    metadata:
+      labels:
+        app: prince-app
+    spec:
+      containers:
+        - name: prince-dp
+          image: prince9680/app:latest     # change image details
+          ports:
+            containerPort: 3000               # set your container port number
+
+
+
+
+
+
+
+
+
+
+Services.yaml
+=================
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prince-service
+  namespace: prince
+spec:
+  selector:
+   app: prince-app
+  ports:
+    - protocol: TCP
+      port: 80                     # Service Port number 
+      targetPort: 3000             # Container Port number
+  type: LoadBalancer
+
+
+
+
+
+
+
+
+Replica.yaml
+====================
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: prince-replica
+  namespace: prince
+  labels:
+    app: prince-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: prince-rp
+  template:
+    labels:
+      app: prince-rp
+  spec:
+    containers:
+      - name: prince-app
+        image: prince9680/app:latest
+        ports:
+          - containerPort: 3000
+
+
+
+
+
+
+configmap.yaml
+===================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prince-config
+  namespace: prince
+data:
+  DB_HOST: "mydatabase"
+  DB_PORT: "27017"
+  APP_ENV: "prod"
+
+
+
+
+
+
+
+secret.yaml
+================
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: prince-secret
+  namespace: prince
+type: Opaque
+data:
+  username: <user name>    # should be encoded in base64 
+  password: <password>     # should be encoded in base64
+
+
+
+
+# command to encode text in base64 (echo -n 'text_message' | base64)
+# command to decode text in base64 (echo -n 'encoded_message' | base64 -d)
