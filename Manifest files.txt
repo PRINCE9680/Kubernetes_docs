@@ -91,13 +91,13 @@ spec:
   replicas: 5
   selector:
     matchLabels:
-      app: prince-rp
+      app: prince-app
   template:
     labels:
-      app: prince-rp
+      app: prince-app
   spec:
     containers:
-      - name: prince-app
+      - name: prince-rs
         image: prince9680/app:latest
         ports:
           - containerPort: 3000
